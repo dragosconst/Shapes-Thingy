@@ -111,7 +111,10 @@ def drawCircleOnSquare(area = 3601, specs = [60], stop = 0): # functia asta veri
 
     # in while ul de mai jos, whichSide e garantat o latura pe care se poate desena
     foundGoodCoord = False
+    tries = 0
     while foundGoodCoord == False:
+        if tries >= 1000: # folosesc tries pt cazu in care nu are fizic spatiu sa faca un cerc de raza minim 60
+            return stop
         foundGoodCoord = True
         radius = rand.randrange(30, int(latura / 2))
         startPoint = rand.randrange(60, int(latura))
@@ -170,9 +173,9 @@ def drawCircleOnSquare(area = 3601, specs = [60], stop = 0): # functia asta veri
                 secondCenter[0] = latura
                                                                                                                                                                                    # caracterul "\" e folosit ca sa lipeasca doua linii de cod
             if math.sqrt((coords[0] - secondCenter[0]) * (coords[0] - secondCenter[0]) + (coords[1] - secondCenter[1]) * (coords[1] - secondCenter[1])) < radius + extras[0]: # formula asta verifica daca doua cercuri se intersecteaza, scuze ca arata asa nasol
-                foundGoodCoord = False;
+                foundGoodCoord = False
             ind += 2
-            
+        tries += 1
     # aici se incheie while u asta titanic cu conditia cu foundGoodCoord
 
     # aici desenez semicercurile
@@ -220,8 +223,11 @@ def drawCircleOnRect(area = 3601, specs = [60, 60], stop = 1): # variabilele au 
     if whichLatura == -1:
         return stop
 
+    tries = 0
     while foundGoodCoord == False: # while ul asta o sa fie more or less identic cu cel de la patrat
         foundGoodCoord = True
+        if tries >= 1001: # daca s a blocat; probabil nu exista nicio raza mai mare ca 60 care
+            return stop
         radius = rand.randrange(30, minim)
         startPoint = rand.randrange(60, minim)
         if whichLatura == 2 or whichLatura == 4: # daca e pe o latura laterala, coordonatele pt y sunt negative, testoasa incepe la (0, 0)
@@ -261,12 +267,11 @@ def drawCircleOnRect(area = 3601, specs = [60, 60], stop = 1): # variabilele au 
         if whichLatura == 1 : # determina centrul cercului pe care vrea sa l deseneze in functie de latura pe care se afla(testoasa merge mereu 
            center = [startPoint - radius, 0] #                                                                                 inainte)
         elif whichLatura == 2:
-           center = [lungime, startPoint - radius]
+           center = [lungime, startPoint + radius]
         elif whichLatura == 3:
-            center = [startPoint - radius, -latime]
+            center = [startPoint + radius, -latime]
         else:
             center = [0, startPoint - radius]
-        
         ind = 2
         while ind <= stop and foundGoodCoord == True: # lista specs o sa aiba pe fiecare pozitie para o alta lista care are coordonatele x1, x2(sau y1, y2) ale unui cerc de
                                                       # pe patrat si pe fiecare pozitie impara are o lista de forma [r, s], unde r e raza cercului si s e latura pe care se afla
@@ -285,6 +290,7 @@ def drawCircleOnRect(area = 3601, specs = [60, 60], stop = 1): # variabilele au 
             if math.sqrt((coords[0] - secondCenter[0]) * (coords[0] - secondCenter[0]) + (coords[1] - secondCenter[1]) * (coords[1] - secondCenter[1])) < radius + extras[0]: # formula asta verifica daca doua cercuri se intersecteaza, scuze ca arata asa nasol
                 foundGoodCoord = False
             ind += 2
+        tries += 1
             
     # aici se incheie while u asta titanic cu conditia cu foundGoodCoord
 
