@@ -60,12 +60,15 @@ def drawRhombus(area = 3601):
     return [latura, angle]
 
 # functia care deseneaza efectiv un cerc e scrisa separat
-def drawSemiCircle(point = [0, 0], radius = 0, angle = 0, side = 1):
+def drawSemiCircle(point, radius, angle, side, color): # variabila color e codata in felu urmator: color = 1 inseamna ca e semicerc alb, orice alta valoare e semicerc albastru
     tl.up()
     tl.right(angle)
     tl.goto(point[0], point[1])
     tl.down()
+    tl.color("white" if color == 1 else "blue")
+    tl.begin_fill()
     tl.circle(radius, 180)
+    tl.end_fill()
 
 # urmatoarele functii deseneaza semicercuri peste formele deja desenate, ca sa dea aparenta ca (formele) sunt facute aleatoriu
 # functia asta o fac ca sa fie codul mai lizibil, returneaza o latura pe care nu e desenat niciun semicerc sau -1 daca nu gaseste nicio latura
@@ -182,30 +185,30 @@ def drawCircleOnSquare(area = 3601, specs = [60], stop = 0): # functia asta veri
     specs.append([0, 0]) # folosesc append pt ca metoa append modifica si obiectul original din "specs"(e totuna cu variabile trimise prin referinta
     specs.append([0, whichLatura]) # in C\C++; gen void foo(int& x)
     if whichLatura == 1:
-        drawSemiCircle([startPoint, 0], radius, 270, 1) # argumentele sunt in ordinea asta: coordonatele unde sa deseneze, raza, unghiul testoasei
+        drawSemiCircle([startPoint, 0], radius, 270, 1, 0) # argumentele sunt in ordinea asta: coordonatele unde sa deseneze, raza, unghiul testoasei
         center[1] = -latura                             # latura
-        drawSemiCircle([startPoint, -latura], radius, 180, 1)  
+        drawSemiCircle([startPoint, -latura], radius, 180, 1, 1)  
         tl.right(270) # rotesc "testoasa" inapoi la rotatia normala
         specs.append(center)
         specs.append([radius, 3])
     elif whichLatura == 2:
-        drawSemiCircle([latura, startPoint], radius, 0, 2)
+        drawSemiCircle([latura, startPoint], radius, 0, 2, 0)
         center[0] = 0
-        drawSemiCircle([0, startPoint], radius, 180, 2)
+        drawSemiCircle([0, startPoint], radius, 180, 2, 1)
         tl.right(180)
         specs.append(center)
         specs.append([radius, 4]) 
     elif whichLatura == 3:
-        drawSemiCircle([startPoint, -latura], radius, 90, 3)
+        drawSemiCircle([startPoint, -latura], radius, 90, 3, 0)
         center[1] = 0
-        drawSemiCircle([startPoint, 0], radius, 180, 3)
+        drawSemiCircle([startPoint, 0], radius, 180, 3, 1)
         tl.right(90) # rotesc "testoasa" inapoi la rotatia normala
         specs.append(center)
         specs.append([radius, 1])
     else:
-        drawSemiCircle([0, startPoint], radius, 180, 4)
+        drawSemiCircle([0, startPoint], radius, 180, 4, 0)
         center[0] = latura
-        drawSemiCircle([latura, startPoint], radius, 180, 4)
+        drawSemiCircle([latura, startPoint], radius, 180, 4, 1)
         specs.append(center)
         specs.append([radius, 2])
     return stop + 4
@@ -298,30 +301,30 @@ def drawCircleOnRect(area = 3601, specs = [60, 60], stop = 1): # variabilele au 
     specs.append([0, 0]) # folosesc append pt ca metoa append modifica si obiectul original din "specs"(e totuna cu variabile trimise prin referinta
     specs.append([0, whichLatura]) # in C\C++; gen void foo(int& x)
     if whichLatura == 1:
-        drawSemiCircle([startPoint, 0], radius, 270, 1) # argumentele sunt in ordinea asta: coordonatele unde sa deseneze, raza, unghiul testoasei
+        drawSemiCircle([startPoint, 0], radius, 270, 1, 0) # argumentele sunt in ordinea asta: coordonatele unde sa deseneze, raza, unghiul testoasei
         center[1] = -latime                             # latura
-        drawSemiCircle([startPoint, -latime], radius, 180, 1)  
+        drawSemiCircle([startPoint, -latime], radius, 180, 1, 1)  
         tl.right(270) # rotesc "testoasa" inapoi la rotatia normala
         specs.append(center)
         specs.append([radius, 3])
     elif whichLatura == 2:
-        drawSemiCircle([lungime, startPoint], radius, 0, 2)
+        drawSemiCircle([lungime, startPoint], radius, 0, 2, 0)
         center[0] = 0
-        drawSemiCircle([0, startPoint], radius, 180, 2)
+        drawSemiCircle([0, startPoint], radius, 180, 2, 1)
         tl.right(180)
         specs.append(center)
         specs.append([radius, 4]) 
     elif whichLatura == 3:
-        drawSemiCircle([startPoint, -latime], radius, 90, 3)
+        drawSemiCircle([startPoint, -latime], radius, 90, 3, 0)
         center[1] = 0
-        drawSemiCircle([startPoint, 0], radius, 180, 3)
+        drawSemiCircle([startPoint, 0], radius, 180, 3, 1)
         tl.right(90) # rotesc "testoasa" inapoi la rotatia normala
         specs.append(center)
         specs.append([radius, 1])
     else:
-        drawSemiCircle([0, startPoint], radius, 180, 4)
+        drawSemiCircle([0, startPoint], radius, 180, 4, 0)
         center[0] = lungime
-        drawSemiCircle([lungime, startPoint], radius, 180, 4)
+        drawSemiCircle([lungime, startPoint], radius, 180, 4, 1)
         specs.append(center)
         specs.append([radius, 2])
     return stop + 4 
@@ -425,34 +428,34 @@ def drawCircleOnRhomb(area = 3601, specs = [60, 120], stop = 1): # specs aici o 
     specs.append([0, 0])
     specs.append([0, whichLatura]) # heavy maths
     if whichLatura == 1:
-        drawSemiCircle([center[0] + radius * np.sin(np.deg2rad(angle / 2)), center[1] - radius * np.cos(np.deg2rad(angle / 2))], radius, 360 - angle / 2, whichLatura)
+        drawSemiCircle([center[0] + radius * np.sin(np.deg2rad(angle / 2)), center[1] - radius * np.cos(np.deg2rad(angle / 2))], radius, 360 - angle / 2, whichLatura, 0)
         tl.right(180 + angle / 2)
         secondPoint = [center[0] + radius * np.sin(np.deg2rad(angle / 2)), center[1] - radius * np.cos(np.deg2rad(angle / 2))]
-        drawSemiCircle([secondPoint[0] - rightLastx, secondPoint[1] - abs(downLasty)], radius, 360 - angle / 2, whichLatura)
+        drawSemiCircle([secondPoint[0] - rightLastx, secondPoint[1] - abs(downLasty)], radius, 360 - angle / 2, whichLatura, 1)
         specs.append([secondPoint[0] - radius * np.sin(np.deg2rad(angle / 2)) - rightLastx, secondPoint[1] + radius * np.cos(np.deg2rad(angle / 2)) - abs(downLasty)])
         specs.append([radius, 3])
         tl.right(180 + angle / 2)
     elif whichLatura == 2:
-        drawSemiCircle([center[0] - radius * np.sin(np.deg2rad(angle / 2)), center[1] - radius * np.cos(np.deg2rad(angle / 2))], radius, angle / 2, whichLatura)
+        drawSemiCircle([center[0] - radius * np.sin(np.deg2rad(angle / 2)), center[1] - radius * np.cos(np.deg2rad(angle / 2))], radius, angle / 2, whichLatura, 0)
         tl.right(360 - angle / 2 + 180)
         secondPoint = [center[0] - radius * np.sin(np.deg2rad(angle / 2)), center[1] - radius * np.cos(np.deg2rad(angle / 2))]
-        drawSemiCircle([secondPoint[0] - rightLastx, secondPoint[1] + abs(downLasty)], radius, angle / 2, whichLatura)
+        drawSemiCircle([secondPoint[0] - rightLastx, secondPoint[1] + abs(downLasty)], radius, angle / 2, whichLatura, 1)
         specs.append([secondPoint[0] + radius * np.sin(np.deg2rad(angle / 2)) - rightLastx, secondPoint[1] + radius * np.cos(np.deg2rad(angle / 2)) + abs(downLasty)])
         specs.append([radius, 4])
         tl.right(360 - angle / 2 + 180)
     elif whichLatura == 3:
-        drawSemiCircle([center[0] - radius * np.sin(np.deg2rad(angle / 2)), center[1] + radius * np.cos(np.deg2rad(angle / 2))], radius, 180 - angle / 2, whichLatura)
+        drawSemiCircle([center[0] - radius * np.sin(np.deg2rad(angle / 2)), center[1] + radius * np.cos(np.deg2rad(angle / 2))], radius, 180 - angle / 2, whichLatura, 0)
         tl.right(180 + angle / 2 + 180)
         secondPoint = [center[0] - radius * np.sin(np.deg2rad(angle / 2)), center[1] + radius * np.cos(np.deg2rad(angle / 2))]
-        drawSemiCircle([secondPoint[0] + rightLastx, secondPoint[1] + abs(downLasty)], radius, 180 - angle / 2, whichLatura)
+        drawSemiCircle([secondPoint[0] + rightLastx, secondPoint[1] + abs(downLasty)], radius, 180 - angle / 2, whichLatura, 1)
         specs.append([secondPoint[0] + radius * np.sin(np.deg2rad(angle / 2)) + rightLastx, secondPoint[1] - radius * np.cos(np.deg2rad(angle / 2)) + abs(downLasty)])
         specs.append([radius, 1])
         tl.right(180 + angle / 2 + 180)
     else:
-        drawSemiCircle([center[0] + radius * np.sin(np.deg2rad(angle / 2)), center[1] + radius * np.cos(np.deg2rad(angle / 2))], radius, 180 + angle / 2, whichLatura)
+        drawSemiCircle([center[0] + radius * np.sin(np.deg2rad(angle / 2)), center[1] + radius * np.cos(np.deg2rad(angle / 2))], radius, 180 + angle / 2, whichLatura, 0)
         tl.right(180 - angle / 2 + 180)
         secondPoint = [center[0] + radius * np.sin(np.deg2rad(angle / 2)), center[1] + radius * np.cos(np.deg2rad(angle / 2))]
-        drawSemiCircle([secondPoint[0] + rightLastx, secondPoint[1] - abs(downLasty)], radius, 180 + angle / 2, whichLatura)
+        drawSemiCircle([secondPoint[0] + rightLastx, secondPoint[1] - abs(downLasty)], radius, 180 + angle / 2, whichLatura, 1)
         specs.append([secondPoint[0] - radius * np.sin(np.deg2rad(angle / 2)) + rightLastx, secondPoint[1] - radius * np.cos(np.deg2rad(angle / 2)) - abs(downLasty)])
         specs.append([radius, 2])
         tl.right(180 - angle / 2 + 180)
@@ -469,7 +472,7 @@ def drawRandomShape(area = 3601):
         shapeSpecs = drawRect(area)
     else:
         shapeSpecs = drawRhombus(area)
-
+    tl.end_fill()
     irregularities = rand.randrange(1, 4) # pt ca momentan lucrez doar cu patrulatere, selecteaza maxim 4 laturi pe care sa deseneze chestii in plus
     if whichShape == 1:
         howManySpecs = 0 
@@ -497,6 +500,8 @@ while area.isdigit() == False or float(area) <= 3600:
 #inputu e default string, ii fac conversia la float ca sa pot aplica radacina patrata 
 area = float(area)
 tl.hideturtle()
+tl.color("blue")
+tl.begin_fill()
 drawRandomShape(area)
 
 
